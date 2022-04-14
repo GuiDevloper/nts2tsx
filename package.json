@@ -1,0 +1,15 @@
+{
+  "name": "nts2tsx",
+  "version": "1.0.0",
+  "description": "Utility to rename NTS files to TSX in the current directory",
+  "author": "GuiDevloper",
+  "license": "MIT",
+  "bin": {
+    "nts2tsx": "./index.js"
+  },
+  "keywords": [
+    "nullstack",
+    "typescript",
+    "tsx"
+  ]
+}
