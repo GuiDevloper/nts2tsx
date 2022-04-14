@@ -31,7 +31,7 @@ function renameAll(dirName) {
     }
 
     const fileContent = fs.readFileSync(dirPath, { encoding: 'utf-8' })
-    const extRegex = new RegExp(`((from|"main":).*)${oldExt}('|"|\`)`, 'g')
+    const extRegex = new RegExp(`((from|"main":).*)\\${oldExt}('|"|\`)`, 'g')
     if (fileContent.match(extRegex)) {
       const newFileContent = fileContent.replace(extRegex, '$1$3')
       fs.writeFileSync(dirPath, newFileContent, 'utf-8')
