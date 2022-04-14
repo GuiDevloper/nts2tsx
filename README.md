@@ -12,6 +12,8 @@ The simplest use searches for NTS files and rename them:
 npx nts2tsx
 ```
 
+Together with renaming, it cleans up any use of `.nts` extension in paths.
+
 > ✨ It stores the relative paths of renamed files at **./nts2tsx-save.txt**
 
 To restore to original filenames, just run:

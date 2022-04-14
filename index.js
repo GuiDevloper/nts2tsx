@@ -14,6 +14,7 @@ if (cmds.includes('--invert')) {
 
 const saveFile = path.join(process.cwd(), './nts2tsx-save.txt')
 const renamedFiles = []
+const updatedFiles = []
 
 function renameAll(dirName) {
   const dir = fs.readdirSync(dirName, { withFileTypes: true })
@@ -27,6 +28,14 @@ function renameAll(dirName) {
 
     if (d.isDirectory()) {
       return renameAll(dirPath)
+    }
+
+    const fileContent = fs.readFileSync(dirPath, { encoding: 'utf-8' })
+    const extRegex = new RegExp(`((from|"main":).*)${oldExt}('|"|\`)`, 'g')
+    if (fileContent.match(extRegex)) {
+      const newFileContent = fileContent.replace(extRegex, '$1$3')
+      fs.writeFileSync(dirPath, newFileContent, 'utf-8')
+      updatedFiles.push(path.relative(process.cwd(), dirPath))
     }
 
     if (d.name.endsWith(oldExt)) {
@@ -54,7 +63,7 @@ function undoRename() {
   storedFiles.forEach(file => {
     fs.renameSync(file, file.replace(new RegExp(`\\${newExt}$`), oldExt))
   })
-  console.log(`${storedFiles.length} files restored!`)
+  console.log(`${storedFiles.length} original filenames restored!`)
   fs.unlinkSync(saveFile)
   console.log('SaveFile erased!')
 }
@@ -63,7 +72,8 @@ function storeUpdated() {
   if (renamedFiles.length === 0) return
   const oldUpdated = getStoredFiles()
   fs.writeFileSync(saveFile, oldUpdated + renamedFiles.join('\n'))
-  console.log(`${renamedFiles.length} changed files saved!`)
+  console.log(`${renamedFiles.length} renamed files saved!`)
+  console.log(`${updatedFiles.length} files contents changed!`)
 }
 
 function run() {
@@ -72,7 +82,7 @@ function run() {
     return undoRename()
   }
   renameAll(process.cwd())
-  if (renamedFiles.length === 0) {
+  if ([...renamedFiles, ...updatedFiles].length === 0) {
     return console.log('No files changed!')
   }
   storeUpdated()
