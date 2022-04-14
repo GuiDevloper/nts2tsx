@@ -12,6 +12,11 @@ function renameAll(dirName) {
   const dir = fs.readdirSync(dirName, { withFileTypes: true })
   dir.forEach(d => {
     const dirPath = path.join(dirName, d.name)
+    if (
+      d.name === 'node_modules' ||
+      d.name === 'webpack.config.js' ||
+      d.name.startsWith('.')
+    ) return
 
     if (d.isDirectory()) {
       return renameAll(dirPath)
