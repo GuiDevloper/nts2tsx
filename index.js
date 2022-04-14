@@ -1,10 +1,16 @@
 #! /usr/bin/env node
 const fs = require('fs')
 const path = require('path')
+const cmds = process.argv.slice(2)
 
 const Extensions = ['.nts', '.tsx']
 let oldExt = Extensions[0]
 let newExt = Extensions[1]
+if (cmds.includes('--invert')) {
+  oldExt = Extensions[1]
+  newExt = Extensions[0]
+  cmds.splice(cmds.indexOf('--invert'), 1)
+}
 
 const renamedFiles = []
 
