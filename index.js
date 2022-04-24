@@ -61,7 +61,7 @@ function undoRename() {
     return console.log('No files to be restored!')
   }
   storedFiles.forEach(file => {
-    fs.renameSync(file, file.replace(new RegExp(`\\${newExt}$`), oldExt))
+    fs.renameSync(file, file.replace(new RegExp(`\\${newExt}\r?\n?$`), oldExt));
   })
   console.log(`${storedFiles.length} original filenames restored!`)
   fs.unlinkSync(saveFile)
